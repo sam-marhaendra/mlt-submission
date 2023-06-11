@@ -2,24 +2,20 @@
 
 ## Domain Proyek
 
-**Latar Belakang**  
+### **Latar Belakang**
+
 Laptop adalah salah satu perangkat yang dapat digunakan untuk melakukan berbagai macam aktivitas, seperti mengetik, mencari artikel di internet, melakukan *virtual meet*, dan masih banyak lagi. Tentunya, sebelum dapat merasakan manfaat yang ditawarkan dari sebuah laptop, seseorang perlu memiliki perangkat tersebut terlebih dahulu.
 
 Harga laptop merupakan satu hal yang menjadi pertimbangan seseorang sebelum memutuskan apakah akan membeli sebuah laptop atau tidak. Harga laptop yang terlalu mahal membuat seseorang perlu mempertimbangkan kembali keputusannya untuk membeli sebuah laptop. Sebaliknya, harga laptop yang terlalu murah tentu ingin dihindari oleh pihak penjual laptop agar mereka tidak mengalami kerugian.
 
 **Oleh karena itu, diperlukan suatu sistem yang dapat secara akurat memprediksi harga laptop sehingga baik pihak pembeli maupun penjual laptop sama-sama merasa diuntungkan, di mana pihak pembeli bisa mendapatkan harga laptop yang ideal sesuai spesifikasi yang mereka inginkan, sedangkan pihak penjual dapat menentukan harga laptop yang tepat sehingga tidak merugikan mereka dan memaksimalkan keuntungan.**
 
-Pada pengerjaan kasus ini, digunakan pendekatan berbasis *machine learning* untuk menentukan harga ideal suatu laptop berdasarkan fitur-fitur yang berkaitan dengan spesifikasi suatu laptop.
+Pada pengerjaan kasus ini, digunakan pendekatan berbasis *machine learning* untuk menentukan harga ideal suatu laptop berdasarkan fitur-fitur yang berkaitan dengan spesifikasi suatu laptop. Penelitian terkait memberikan wawasan tambahan terkait bagaimana pemanfaatan pendekatan berbasis *machine learning* dalam menyelesaikan permasalahan ini [2],[3],[4].
 
-**Alasan Penting yang Mendasari Proyek Ini**
+### **Alasan Penting yang Mendasari Proyek Ini**
 - Harga laptop yang terlalu mahal membuat seseorang untuk mempertimbangkan kembali terkait keputusannya untuk membeli suatu laptop.
 - Harga laptop yang terlalu murah dapat mengakibatkan kerugian dari pihak penjual laptop karena besarnya biaya produksi laptop yang dikeluarkan tidak sebanding dengan harga jual laptop yang ditetapkan.
 - Perlunya penyelesaian permasalahan terkait penentuan harga laptop dengan menggunakan pendekatan berbasis *machine learning* untuk dapat menentukan harga ideal suatu laptop berdasarkan fitur-fitur yang berkaitan dengan spesifikasi suatu laptop.
-
-**Riset Terkait**
-   - [Laptop Price Prediction using Machine Learning Algorithms](https://ieeexplore.ieee.org/document/10093357)
-   - [Laptop Price Prediction with Machine Learning Using Regression Algorithm](http://jurnal.unprimdn.ac.id/index.php/JUSIKOM/article/view/2850/1879)
-   - [Laptop Price Prediction using Machine Learning](https://ijcsmc.com/docs/papers/January2022/V11I1202229.pdf)
 
 ## *Business Understanding*
 Harga laptop menjadi satu hal yang menjadi pertimbangan paling utama baik dari sisi pembeli maupun penjual. Dari sisi pembeli, mereka tentu menginginkan harga laptop yang ideal sesuai dengan spesifikasi yang diinginkan. Dari sisi penjual, mereka tentu ingin menetapkan harga laptop yang dapat memaksimalkan keuntungan mereka sembari mempertimbangkan tingkat ketepatan dari harga yang ditentukan agar tetap dapat menarik minat pembeli.
@@ -43,11 +39,16 @@ Berikut merupakan tujuan yang ingin dicapai dari pengerjaan kasus ini.
 - Guna mengukur tingkat keakuratan prediksi harga laptop pada sistem yang dirancang, maka metrik yang digunakan adalah *Mean Absolute Error* (MAE). 
 
 ## *Data Understanding*
-Data yang digunakan adalah dataset terkait harga laptop beserta fitur-fitur yang berkaitan dengan spesifikasi laptop. Data yang dimaksud dapat diunduh pada tautan berikut.
+Data yang digunakan adalah [Laptop Prices Dataset](https://www.kaggle.com/datasets/anubhavgoyal10/laptop-prices-dataset). Dataset ini bersumber dari Kaggle yang berisi data terkait harga laptop beserta fitur-fitur yang berkaitan dengan spesifikasi laptop [1]. Dataset ini memiliki 823 baris data dengan 19 kolom.
 
-[Laptop Prices Dataset](https://www.kaggle.com/datasets/anubhavgoyal10/laptop-prices-dataset)
+### Sampel Data
+Tabel 1. Sampel Data
+| brand | processor_brand | processor_name | processor_gnrtn | ram_gb | ram_type | ssd | hdd | os | os_bit | graphic_card_gb | weight | warranty | Touchscreen | msoffice | Price | rating | Number of Ratings | Number of Reviews |
+|-------|-----------------|----------------|-----------------|--------|----------|-----|-----|----|--------|-----------------|--------|-----------|-------------|----------|-------|--------|-------------------|-------------------|
+| ASUS | Intel | Core i3 | 10th | 4 GB | DDR4 | 0 GB | 1024 GB | Windows | 64-bit | 0 GB | Casual | No warranty | No | No | 34649 | 2 stars | 3 | 0 |
+| Lenovo | Intel | Core i3 | 10th | 4 GB | DDR4 | 0 GB | 1024 GB | Windows | 64-bit | 0 GB | Casual | No warranty | No | No | 38999 | 3 stars | 65 | 5 |
+| Lenovo | Intel | Core i3 | 10th | 4 GB | DDR4 | 0 GB | 1024 GB | Windows | 64-bit | 0 GB | Casual | No warranty | No | No | 39999 | 3 stars | 8 | 1 |
 
-Jumlah baris data yang terdapat pada dataset tersebut sebanyak 823 baris data.
 
 ### Deskripsi Fitur
 - `brand`: Nama merk laptop
@@ -79,84 +80,84 @@ Jumlah baris data yang terdapat pada dataset tersebut sebanyak 823 baris data.
 
 ### **Hasil *Exploratory Data Analysis***
 
-#### Gambar 1. Visualisasi fitur `Number of Ratings` menggunakan *boxplot*
 ![Number of Ratings](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/3e3004da-e412-41a0-94fd-3920d973b7ad)
-
-#### Gambar 2. Visualisasi fitur `Number of Reviews` menggunakan *boxplot*
+#### Gambar 1. Visualisasi fitur `Number of Ratings` menggunakan *boxplot*
+<br/><br/>
 ![Number of Reviews](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/4c298e3a-fc0f-4c7b-a178-d3092ca0d4d8)
-
-#### Gambar 3. Visualisasi fitur `Price` menggunakan *boxplot*
+#### Gambar 2. Visualisasi fitur `Number of Reviews` menggunakan *boxplot*
+<br/><br/>
 ![Price](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/b8a090ad-c1c9-45dc-bab8-4f0c078f59af)
-
+#### Gambar 3. Visualisasi fitur `Price` menggunakan *boxplot*
+<br/><br/>
 Berdasarkan Gambar 1, Gambar 2, dan Gambar 3, terlihat bahwa terdapat *outlier* pada ketiga fitur tersebut karena di setiap fitur tersebut terdapat *data points* yang nilainya lebih besar dari nilai kuartil ketiga (Q3).
-
-#### Gambar 4. *Univariate analysis* pada fitur bertipe kategorik
+<br/><br/><br/><br/>
 ![Univariate Analysis (Categorical)](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/10d75cdf-44ee-47c0-bd90-d02c9f91d025)
-
+#### Gambar 4. *Univariate analysis* pada fitur bertipe kategorik
+<br/><br/>
 Beberapa *insights* yang didapat dari Gambar 4 yakni seperti 4 *brand* paling banyak yakni ASUS, DELL, Lenovo, dan HP. Kemudian, terdapat tiga jenis *processor brand*, yakni Intel, AMD, dan M1. *Processor name* paling banyak yakni Core i5. Lalu, sebagian besar laptop tidak didukung oleh kartu grafis, dengan mayoritas sistem operasi yang dipasang yakni Windows 64-bit. 
-
-#### Gambar 5. *Univariate analysis* pada fitur bertipe numerik
+<br/><br/><br/><br/>
 ![Univariate Analysis (Numerical)](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/a3bbb42a-0bff-4f3a-a38c-d6bd21f8522e)
-
+#### Gambar 5. *Univariate analysis* pada fitur bertipe numerik
+<br/><br/>
 Berdasarkan Gambar 5, dapat dilihat bahwa fitur `Number of Ratings` dan `Number of Reviews` tergolong *right-skewed*. Kemudian, sekitar setengah dari harga laptop berada di kisaran di bawah $80000. 
-
-#### Gambar 6. *Multivariate analysis* antara fitur `brand` dengan `Price`
+<br/><br/><br/><br/>
 ![brand](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/f698def5-5411-4abd-b835-875abe5fef6a)
-
-#### Gambar 7. *Multivariate analysis* antara fitur `processor_brand` dengan `Price`
+#### Gambar 6. *Multivariate analysis* antara fitur `brand` dengan `Price`
+<br/><br/>
 ![processor_brand](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/ff6bf7fd-3dec-401a-8b8b-9d1d51c2db46)
-
-#### Gambar 8. *Multivariate analysis* antara fitur `processor_name` dengan `Price`
+#### Gambar 7. *Multivariate analysis* antara fitur `processor_brand` dengan `Price`
+<br/><br/>
 ![processor_name](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/de0130cc-ff2d-444d-8e1d-71029f4e61bc)
-
-#### Gambar 9. *Multivariate analysis* antara fitur `processor_gnrtn` dengan `Price`
+#### Gambar 8. *Multivariate analysis* antara fitur `processor_name` dengan `Price`
+<br/><br/>
 ![processor_gnrtn](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/513ef59e-32ce-46eb-8358-ac2d1687d7f4)
-
-#### Gambar 10. *Multivariate analysis* antara fitur `ram_gb` dengan `Price`
+#### Gambar 9. *Multivariate analysis* antara fitur `processor_gnrtn` dengan `Price`
+<br/><br/>
 ![ram_gb](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/6046d5c2-4aa9-4018-8db4-b355d8bdc83c)
-
-#### Gambar 11 *Multivariate analysis* antara fitur `ram_type` dengan `Price`
+#### Gambar 10. *Multivariate analysis* antara fitur `ram_gb` dengan `Price`
+<br/><br/>
 ![ram_type](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/f03d8cd9-184f-430b-b546-ea8bb2f9af21)
-
-#### Gambar 12. *Multivariate analysis* antara fitur `ssd` dengan `Price`
+#### Gambar 11 *Multivariate analysis* antara fitur `ram_type` dengan `Price`
+<br/><br/>
 ![ssd](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/9bb67cd3-ef7b-47d6-b3ef-7ab9fa7ed31c)
-
-#### Gambar 13. *Multivariate analysis* antara fitur `hdd` dengan `Price`
+#### Gambar 12. *Multivariate analysis* antara fitur `ssd` dengan `Price`
+<br/><br/>
 ![hdd](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/13d87b25-9133-4869-b054-b5148d8d939d)
-
-#### Gambar 14. *Multivariate analysis* antara fitur `os` dengan `Price`
+#### Gambar 13. *Multivariate analysis* antara fitur `hdd` dengan `Price`
+<br/><br/>
 ![os](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/05dc35bb-8b10-4964-af9b-a1f1cbf49d21)
-
-#### Gambar 15. *Multivariate analysis* antara fitur `os_bit` dengan `Price`
+#### Gambar 14. *Multivariate analysis* antara fitur `os` dengan `Price`
+<br/><br/>
 ![os_bit](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/d6e03291-4ec1-49ec-8c77-ed4cfead521b)
-
-#### Gambar 16. *Multivariate analysis* antara fitur `graphic_card_gb` dengan `Price`
+#### Gambar 15. *Multivariate analysis* antara fitur `os_bit` dengan `Price`
+<br/><br/>
 ![graphic_card_gb](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/8b20ca96-16eb-4d55-bd3a-4fa5ed870610)
-
-#### Gambar 17. *Multivariate analysis* antara fitur `weight` dengan `Price`
+#### Gambar 16. *Multivariate analysis* antara fitur `graphic_card_gb` dengan `Price`
+<br/><br/>
 ![weight](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/00b01008-0560-438c-ac12-eb790dbc5f92)
-
-#### Gambar 18. *Multivariate analysis* antara fitur `warranty` dengan `Price`
+#### Gambar 17. *Multivariate analysis* antara fitur `weight` dengan `Price`
+<br/><br/>
 ![warranty](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/5fb0528d-a837-4830-9b43-fdfd6fe0c68c)
-
-#### Gambar 19. *Multivariate analysis* antara fitur `Touchscreen` dengan `Price`
+#### Gambar 18. *Multivariate analysis* antara fitur `warranty` dengan `Price`
+<br/><br/>
 ![touchscreen](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/91b69bb8-88e7-4b0e-bc11-dccaf5400180)
-
-#### Gambar 20. *Multivariate analysis* antara fitur `msoffice` dengan `Price`
+#### Gambar 19. *Multivariate analysis* antara fitur `Touchscreen` dengan `Price`
+<br/><br/>
 ![msoffice](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/ef96b9b6-bab1-4c02-9041-d52c73ac5bf3)
-
-#### Gambar 21. *Multivariate analysis* antara fitur `rating` dengan `Price`
+#### Gambar 20. *Multivariate analysis* antara fitur `msoffice` dengan `Price`
+<br/><br/>
 ![rating](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/472e2f23-ccfa-4098-ac32-c379e3aba2ba)
-
+#### Gambar 21. *Multivariate analysis* antara fitur `rating` dengan `Price`
+<br/><br/>
 Berdasarkan Gambar 6 hingga Gambar 21, beberapa hal yang dapat diketahui yaitu seperti pada fitur `processor_name`, di mana peningkatan harga laptop terjadi seiring dengan peningkatan *processor*-nya. Kemudian, peningkatan harga laptop juga terjadi seiring dengan semakin tingginya spesifikasi kartu grafis yang terpasang pada laptop.
+<br/><br/><br/><br/>
 
-
-#### Gambar 22. *Multivariate analysis* antar fitur numerik
 ![Multivariate Analysis (Numerical)](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/d65f4ea9-dfcf-4cbc-b7e2-0379aa6ea429)
-
-#### Gambar 23. *Correlation heatmap* antar fitur numerik
+#### Gambar 22. *Multivariate analysis* antar fitur numerik
+<br/><br/>
 ![Correlation Heatmap](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/1eb4c6ed-0381-4ed6-ac32-7f42c5d92f7f)
-
+#### Gambar 23. *Correlation heatmap* antar fitur numerik
+<br/><br/>
 Berdasarkan Gambar 22 dan 23, dapat diketahui bahwa fitur `Number of Ratings` dan `Number of Reviews` saling berkorelasi, tetapi memiliki korelasi yang rendah terhadap fitur target. Namun, tidak dilakukan *drop* fitur dikarenakan nilai absolut dari korelasi kedua fitur tersebut terhadap fitur target masih di atas 0.1.
 
 
@@ -188,16 +189,32 @@ Berdasarkan Gambar 22 dan 23, dapat diketahui bahwa fitur `Number of Ratings` da
 - Kekurangan *XGBoost* yakni lebih rentan terhadap *overfitting* sebagai akibat dari kompleksitas model.
 
 ## *Evaluation*
-Tabel 1. *Model Evaluation* Menggunakan *Mean Absolute Error* (MAE)
-Model                        | train       | test	  |
+Tabel 2. *Model Evaluation* Menggunakan *Mean Absolute Error* (MAE)
+Model                        | train       | test	       |
 ---------------------------- | ----------- | ------------ |
 RandomForestRegressor        | 3295.778792 | 7631.269655  |
 XGBoostRegressor             | 1086.37863  | 7056.627808  |
-- Metrik yang dipakai untuk mengukur performa model adalah *mean absolute error* (MAE). Metrik ini merupakan salah satu metrik evaluasi yang mengukur rata-rata selisih absolut antara hasil prediksi dengan *ground truth*-nya. Berikut merupakan rumus dari MAE[3].
+- Metrik yang dipakai untuk mengukur performa model adalah *mean absolute error* (MAE). Metrik ini merupakan salah satu metrik evaluasi yang mengukur rata-rata selisih absolut antara hasil prediksi dengan *ground truth*-nya. Berikut merupakan rumus dari MAE [5].
 $$\frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
-- Berdasarkan Tabel 1, dapat dilihat bahwa nilai MAE model *Random Forest* pada saat *training* yaitu 3295.778792 dan pada saat *test* yakni 7631.269655. Sedangkan, nilai MAE model *XGBoost* pada saat *training* adalah 1086.37863 dan pada saat *test* didapatkan nilai 7056.627808.   
+- Berdasarkan Tabel 2, dapat dilihat bahwa nilai MAE model *Random Forest* pada saat *training* yaitu 3295.778792 dan pada saat *test* yakni 7631.269655. Sedangkan, nilai MAE model *XGBoost* pada saat *training* adalah 1086.37863 dan pada saat *test* didapatkan nilai 7056.627808.   
 - Nilai MAE yang didapat oleh kedua model tersebut kurang dari 10%, sehingga model sudah dapat dikatakan *(good fit)* meskipun terlihat bahwa kedua model masih cenderung *overfit*.
 - Berdasarkan hasil pelatihan model, algoritma terbaik yang dapat digunakan dalam memprediksi harga laptop yaitu algoritma *XGBoost*. Alasannya yaitu selain nilai MAE nya kurang dari 10%, juga lebih rendah daripada nilai MAE yang dihasilkan *Random Forest*.
+
+Tabel 3. Tabel Hasil Prediksi
+y_true | prediction_rf | prediction_xgb |
+------ | ------------- | -------------- |
+77990  | 65956.79      | 64759.058594   |
+70990  | 71592.10      | 76726.710938   |
+61290  | 60828.02      | 61365.449219   |
+48790  | 63820.69      | 55865.378906   |
+59999	 | 63540.21      | 60433.089844   |
+99999	 | 103608.78     | 104016.421875  |
+72990  | 98379.30	     | 98617.226562   |
+106490 | 75484.92      | 84296.968750   |
+48490	 | 42195.49	     | 42514.070312   |
+59990	 | 63163.52      | 57472.160156   |
+
+- Dari Tabel 3 dapat dilihat bagaimana komparasi antara hasil prediksi kedua model dengan nilai sebenarnya. Dapat dilihat bahwa pada beberapa kasus seperti pada baris ketiga, kedua model mampu menghasilkan nilai prediksi harga laptop yang cukup akurat. Namun, di beberapa kasus lain model masih kesulitan untuk memprediksi harga laptop, seperti contohnya yaitu pada baris ketujuh.
 
 ## Kesimpulan dan Saran
 - Kedua model yang dipakai pada pengerjaan kasus kali ini dapat dikatakan *good fit* karena nilai MAE yang dihasilkan model kurang dari 10%, atau lebih tepatnya kurang dari 13210.8.
@@ -205,9 +222,13 @@ $$\frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
 - Perlu lebih banyak data agar model mampu lebih baik memelajari data yang ada.
 - Perlu dilakukan perbandingan dengan lebih banyak algoritma lain dan juga melakukan *hyperparameter tuning* untuk mendapatkan hasil yang lebih baik.
 
-## Referensi
+## Daftar Pustaka
 [1] Goyal, A. (2023) Laptop Prices Dataset. Kaggle. [Online]. Available: https://www.kaggle.com/datasets/anubhavgoyal10/laptop-prices-dataset.
 
 [2] ‌M. A. Shaik, M. Varshith, S. SriVyshnavi, N. Sanjana and R. Sujith, "Laptop Price Prediction using Machine Learning Algorithms," 2022 International Conference on Emerging Trends in Engineering and Medical Sciences (ICETEMS), Nagpur, India, 2022, pp. 226-231, doi: 10.1109/ICETEMS56252.2022.10093357.
 
-‌[3] C. J. Willmott and K. Matsuura, "Advantages of the mean absolute error (MAE) over the root mean square error (RMSE) in assessing average model performance," vol. 30, pp. 79–82, Jan. 2005, doi: https://doi.org/10.3354/cr030079.
+[3] A. D. Siburian, D. R. H. Sitompul, S. H. Sinurat, A. Situmorang, Ruben, D. J. Ziegel, E. Indra, "Laptop Price Prediction with Machine Learning Using Regression Algorithm," Jurnal Sistem Informasi dan Ilmu Komputer Prima, vol. 6, no. 1, pp. 87-91, Aug. 2022.
+
+[4] Prof. Vaishali Surjuse et al, "Laptop Price Prediction using Machine Learning," International Journal of Computer Science and Mobile Computing, vol. 11, issue. 1, pp. 164-168, Jan. 2022.
+
+‌[5] C. J. Willmott and K. Matsuura, "Advantages of the mean absolute error (MAE) over the root mean square error (RMSE) in assessing average model performance," vol. 30, pp. 79–82, Jan. 2005, doi: https://doi.org/10.3354/cr030079.
