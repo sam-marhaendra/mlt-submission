@@ -67,6 +67,7 @@ print(df_foods['C_Type'].unique())
 
 df_foods['C_Type'].value_counts().sort_values()
 
+# Distribution plot of data about food types
 df_foods['C_Type'].value_counts().sort_values().plot(kind='barh')
 
 """### **`df_ratings`**"""
@@ -82,6 +83,7 @@ print('Count of `Food_ID`: ', len(df_ratings['Food_ID'].unique()))
 
 df_ratings.describe()
 
+# Distribution plot of data about rating
 sns.displot(df_ratings['Rating'], kde=True, bins=10)
 
 """# **Data Preprocessing**"""
@@ -89,6 +91,7 @@ sns.displot(df_ratings['Rating'], kde=True, bins=10)
 all_food_rate = df_ratings
 all_food_rate
 
+# Merge dataframe `all_food_rate` and dataframe `df_foods` based on `Food_ID` column
 all_food = pd.merge(all_food_rate,
                     df_foods[['Food_ID', 'Name', 'C_Type']],
                     on='Food_ID',
@@ -98,16 +101,21 @@ all_food
 
 """# **Data Preparation**"""
 
+# Check for missing value on dataframe `all_food`
 all_food.isnull().sum()
 
+# Removing missing value on dataframe `all_food`
 all_food = all_food.dropna()
 all_food
 
+# Check for missing value on dataframe `df_ratings`
 df_ratings.isnull().sum()
 
+# Removing missing value on dataframe `df_ratings`
 df_ratings = df_ratings.dropna()
 df_ratings
 
+# Sort data based on `Food_ID` column
 fix_food = all_food.sort_values('Food_ID', ascending=True)
 fix_food
 
@@ -118,11 +126,13 @@ fix_food['C_Type'].unique()
 preparation = fix_food
 preparation.sort_values('Food_ID')
 
+# Removing duplicate rows based on `Food_ID` column
 preparation = preparation.drop_duplicates('Food_ID')
 preparation
 
 preparation['C_Type'][preparation['C_Type'] == 'Healthy Food'] = 'Healthy_Food'
 
+# Converting `Food_ID`, `Name`, and `C_Type` series into list
 food_id = preparation['Food_ID'].tolist()
 food_name = preparation['Name'].tolist()
 food_category = preparation['C_Type'].tolist()
@@ -131,6 +141,7 @@ print(len(food_id))
 print(len(food_name))
 print(len(food_category))
 
+# Creating dictionary for `food_id`, `food_name`, and `food_category`
 food_new = pd.DataFrame({
     'id': food_id,
     'food_name': food_name,
@@ -147,17 +158,29 @@ food_new
 data = food_new
 data.sample(5)
 
+# TfidfVectorizer initialization
 tf = TfidfVectorizer()
 
+# Determining idf on the food types
 tf.fit(data['category'])
 
+# Mapping array from integer index feature to name feature
 tf.get_feature_names_out()
 
+# Doing fit_transform into matrix form
 tfidf_matrix = tf.fit_transform(data['category'])
 
+# Check tf-idf matrix
 tfidf_matrix.shape
 
+# Changing tf-idf vector into matrix using todense() function
 tfidf_matrix.todense()
+
+"""
+  Create dataframe to see tf-idf matrix
+  Column filled by food type
+  Row filled by food name
+"""
 
 pd.DataFrame(
     tfidf_matrix.todense(),
@@ -165,6 +188,7 @@ pd.DataFrame(
     index=data['food_name']
 ).sample(11, axis=1).sample(10, axis=0)
 
+# Determining cosine similarity on tf-idf matrix
 cosine_sim = cosine_similarity(tfidf_matrix)
 cosine_sim
 
@@ -172,12 +196,17 @@ cosine_sim
 cosine_sim_df = pd.DataFrame(cosine_sim, index=data['food_name'], columns=data['food_name'])
 print('Shape:', cosine_sim_df.shape)
 
-# Checking similarity matrix on each destinations
+# Checking similarity matrix on each food
 cosine_sim_df.sample(5, axis=1).sample(10, axis=0)
 
 def food_recommendations(food_name, similarity_data=cosine_sim_df, items=data[['food_name', 'category']], k=5):
+  # Fetch data by using argpartition for indirectly partition along the given axis
   index = similarity_data.loc[:,food_name].to_numpy().argpartition(range(-1, -k, -1))
+
+  # Pick data with greatest similarity from the existing index
   closest = similarity_data.columns[index[-1:-(k+2):-1]]
+
+  # Drop `food_name` so that the searched food name is not appear in the recommendation result
   closest = closest.drop(food_name, errors='ignore')
 
   return pd.DataFrame(closest).merge(items).head(k)
@@ -190,32 +219,48 @@ food_recommendations('banana chips')
 
 df_ratings
 
+# Changing `User_ID` to list without same value
 user_ids = df_ratings['User_ID'].unique().tolist()
 print('list User_ID: ', user_ids)
 
+# Encoding `User_ID`
 user_to_user_encoded = {x: i for i, x in enumerate(user_ids)}
 print('encoded User_ID : ', user_to_user_encoded)
 
+# Encoding process number to `User_ID`
 user_encoded_to_user = {i: x for i, x in enumerate(user_ids)}
 print('encoded number to User_ID: ', user_encoded_to_user)
 
+# Changing `Food_ID` to list without same value
 food_ids = df_ratings['Food_ID'].unique().tolist()
 
+# Encoding `Food_ID`
 food_to_food_encoded = {x: i for i, x in enumerate(food_ids)}
 
+# Encoding process number to `Food_ID`
 food_encoded_to_food = {i: x for i, x in enumerate(food_ids)}
 
+# Mapping `User_ID` to dataframe user
 df_ratings['user'] = df_ratings['User_ID'].map(user_to_user_encoded)
+
+# Mapping `Food_ID` to dataframe food
 df_ratings['food'] = df_ratings['Food_ID'].map(food_to_food_encoded)
 
+# Check for number of users
 num_users = len(user_to_user_encoded)
 print(num_users)
 
+# Check for number of foods
 num_food = len(food_encoded_to_food)
 print(num_food)
 
+# Changing rating into floating numbers
 df_ratings['rating'] = df_ratings['Rating'].values.astype(np.float32)
+
+# Minimum value of rating
 min_rating = min(df_ratings['rating'])
+
+# Maximum value of rating
 max_rating = max(df_ratings['rating'])
 
 print('Number of User: {}, Number of Food: {}, Min Rating: {}, Max Rating: {}'.format(
@@ -223,13 +268,17 @@ print('Number of User: {}, Number of Food: {}, Min Rating: {}, Max Rating: {}'.f
     )
 )
 
+# Shuffle the dataset
 df_ratings = df_ratings.sample(frac=1, random_state=42)
 df_ratings
 
+# Creating `x` variable to match user and food data into one value
 x = df_ratings[['user', 'food']].values
 
+# Creating `y` variable to make rating from the result
 y = df_ratings['rating'].apply(lambda x: (x - min_rating) / (max_rating - min_rating)).values
 
+# Data splitting into 80% training set and 20% validation set
 train_indices = int(0.8 * df_ratings.shape[0])
 x_train, x_val, y_train, y_val = (
     x[:train_indices],
@@ -280,6 +329,8 @@ model.compile(
     optimizer = keras.optimizers.Adam(learning_rate=0.0001),
     metrics=[tf.keras.metrics.RootMeanSquaredError()]
 )
+
+# Training process
 
 history = model.fit(
     x=x_train,
