@@ -55,10 +55,14 @@ df_foods.head(3)
 
 df_foods.shape
 
+"""From this code cell above, it can be seen that the food dataset has 400 rows with 5 columns."""
+
 df_foods.info()
 
 print(len(df_foods['C_Type'].unique()))
 print(df_foods['C_Type'].unique())
+
+"""From the code cell above, it can be seen that there are 16 different food types in the dataset. But, it is noticed that Korean food has two unique values that must be corrected first. So, the code cell below is used to correct this one."""
 
 df_foods['C_Type'] = df_foods['C_Type'].replace([' Korean'], 'Korean')
 
@@ -67,14 +71,18 @@ print(df_foods['C_Type'].unique())
 
 df_foods['C_Type'].value_counts().sort_values()
 
-# Distribution plot of data about food types
 df_foods['C_Type'].value_counts().sort_values().plot(kind='barh')
 
-"""### **`df_ratings`**"""
+"""The code cell above is about the distribution plot of data about food types. From this plot, it can be shown that the most dominant food type belongs to Indian food, followed by Healthy Food and Dessert.
+
+### **`df_ratings`**
+"""
 
 df_ratings.head(3)
 
 df_ratings.shape
+
+"""From this code cell above, it is known that the rating dataset has 512 rows with 3 columns."""
 
 df_ratings.info()
 
@@ -83,15 +91,16 @@ print('Count of `Food_ID`: ', len(df_ratings['Food_ID'].unique()))
 
 df_ratings.describe()
 
-# Distribution plot of data about rating
 sns.displot(df_ratings['Rating'], kde=True, bins=10)
 
-"""# **Data Preprocessing**"""
+"""The code cell above is about the distribution plot of data about rating. From this plot, it can be shown that the rating distribution tends to be around the numbers 3, 5, and 10.
+
+# **Data Preprocessing**
+"""
 
 all_food_rate = df_ratings
 all_food_rate
 
-# Merge dataframe `all_food_rate` and dataframe `df_foods` based on `Food_ID` column
 all_food = pd.merge(all_food_rate,
                     df_foods[['Food_ID', 'Name', 'C_Type']],
                     on='Food_ID',
@@ -99,25 +108,33 @@ all_food = pd.merge(all_food_rate,
 
 all_food
 
-"""# **Data Preparation**"""
+"""The code cell above is used to merge dataframe `all_food_rate` and dataframe `df_foods` based on `Food_ID` column
 
-# Check for missing value on dataframe `all_food`
+# **Data Preparation**
+"""
+
 all_food.isnull().sum()
 
-# Removing missing value on dataframe `all_food`
+"""The code cell above is used to check for missing value on dataframe `all_food`"""
+
 all_food = all_food.dropna()
 all_food
 
-# Check for missing value on dataframe `df_ratings`
+"""The code cell above is used to remove missing value on dataframe `all_food`. Since there is only 1 row that has missing value, the food dataset now has 511 rows."""
+
 df_ratings.isnull().sum()
 
-# Removing missing value on dataframe `df_ratings`
+"""The code cell above is used to check for missing value on dataframe `df_ratings`."""
+
 df_ratings = df_ratings.dropna()
 df_ratings
 
-# Sort data based on `Food_ID` column
+"""The code cell above is used for removing missing value on dataframe `df_ratings`. Since there is also only 1 row that has missing value, the rating dataset now has 511 rows."""
+
 fix_food = all_food.sort_values('Food_ID', ascending=True)
 fix_food
+
+"""The code cell above is used to sort data based on `Food_ID` column."""
 
 len(fix_food['Food_ID'].unique())
 
@@ -126,13 +143,13 @@ fix_food['C_Type'].unique()
 preparation = fix_food
 preparation.sort_values('Food_ID')
 
-# Removing duplicate rows based on `Food_ID` column
 preparation = preparation.drop_duplicates('Food_ID')
 preparation
 
+"""This code cell above is used for removing duplicate rows based on `Food_ID` column. After implementing the above code cell, the remaining rows are 309 rows."""
+
 preparation['C_Type'][preparation['C_Type'] == 'Healthy Food'] = 'Healthy_Food'
 
-# Converting `Food_ID`, `Name`, and `C_Type` series into list
 food_id = preparation['Food_ID'].tolist()
 food_name = preparation['Name'].tolist()
 food_category = preparation['C_Type'].tolist()
@@ -141,7 +158,8 @@ print(len(food_id))
 print(len(food_name))
 print(len(food_category))
 
-# Creating dictionary for `food_id`, `food_name`, and `food_category`
+"""This code cell above is used for converting `Food_ID`, `Name`, and `C_Type` series into list."""
+
 food_new = pd.DataFrame({
     'id': food_id,
     'food_name': food_name,
@@ -150,7 +168,9 @@ food_new = pd.DataFrame({
 
 food_new
 
-"""# **Modeling**
+"""The code cell above is used to create dictionary for `food_id`, `food_name`, and `food_category`.
+
+# **Modeling**
 
 ## **1. Content-Based Filtering**
 """
@@ -158,29 +178,23 @@ food_new
 data = food_new
 data.sample(5)
 
-# TfidfVectorizer initialization
 tf = TfidfVectorizer()
 
-# Determining idf on the food types
 tf.fit(data['category'])
 
-# Mapping array from integer index feature to name feature
 tf.get_feature_names_out()
 
-# Doing fit_transform into matrix form
+"""The code cell above performs TfidfVectorizer initialization, followed by determining idf on the food types and mapping array from integer index feature to name feature."""
+
 tfidf_matrix = tf.fit_transform(data['category'])
 
-# Check tf-idf matrix
 tfidf_matrix.shape
 
-# Changing tf-idf vector into matrix using todense() function
+"""The code cell above is used to do fit_transform into matrix form and check the shape of the matrix."""
+
 tfidf_matrix.todense()
 
-"""
-  Create dataframe to see tf-idf matrix
-  Column filled by food type
-  Row filled by food name
-"""
+"""The code cell above is used to change tf-idf vector into matrix using todense() function."""
 
 pd.DataFrame(
     tfidf_matrix.todense(),
@@ -188,34 +202,39 @@ pd.DataFrame(
     index=data['food_name']
 ).sample(11, axis=1).sample(10, axis=0)
 
-# Determining cosine similarity on tf-idf matrix
+"""The code cell above is used to create dataframe to see tf-idf matrix, with the column filled by food type and the row filled by food name."""
+
 cosine_sim = cosine_similarity(tfidf_matrix)
 cosine_sim
 
-# Creating new dataframe from `cosine_sim` with rows and columns as food_name
+"""The code cell above is used to determine cosine similarity on tf-idf matrix."""
+
 cosine_sim_df = pd.DataFrame(cosine_sim, index=data['food_name'], columns=data['food_name'])
 print('Shape:', cosine_sim_df.shape)
 
-# Checking similarity matrix on each food
 cosine_sim_df.sample(5, axis=1).sample(10, axis=0)
 
+"""The code cell above is used to create new dataframe from `cosine_sim` with rows and columns as food_name, then followed by checking similarity matrix on each food."""
+
 def food_recommendations(food_name, similarity_data=cosine_sim_df, items=data[['food_name', 'category']], k=5):
-  # Fetch data by using argpartition for indirectly partition along the given axis
   index = similarity_data.loc[:,food_name].to_numpy().argpartition(range(-1, -k, -1))
 
-  # Pick data with greatest similarity from the existing index
   closest = similarity_data.columns[index[-1:-(k+2):-1]]
 
-  # Drop `food_name` so that the searched food name is not appear in the recommendation result
   closest = closest.drop(food_name, errors='ignore')
 
   return pd.DataFrame(closest).merge(items).head(k)
+
+"""The code cell above is used to create a function that can be used to give food recommendation with the input is a food name. The function will first fetch data by using argpartition for indirectly partition along the given axis, pick data with greatest similarity from the existing index, and drop `food_name` so that the searched food name is not appear in the recommendation result."""
 
 data[data['food_name'].eq('banana chips')]
 
 food_recommendations('banana chips')
 
-"""## **2. Collaborative Filtering**"""
+"""The output of the code cell above shows the food recommendation results. It can be seen that the function outputs 5 food names that have the same category as the food name that has been inputted before, that is Snack category.
+
+## **2. Collaborative Filtering**
+"""
 
 df_ratings
 
@@ -231,6 +250,8 @@ print('encoded User_ID : ', user_to_user_encoded)
 user_encoded_to_user = {i: x for i, x in enumerate(user_ids)}
 print('encoded number to User_ID: ', user_encoded_to_user)
 
+"""The code cell above is used to encode the `User_ID`."""
+
 # Changing `Food_ID` to list without same value
 food_ids = df_ratings['Food_ID'].unique().tolist()
 
@@ -240,11 +261,15 @@ food_to_food_encoded = {x: i for i, x in enumerate(food_ids)}
 # Encoding process number to `Food_ID`
 food_encoded_to_food = {i: x for i, x in enumerate(food_ids)}
 
+"""The code cell above is used to encode the `Food_ID`."""
+
 # Mapping `User_ID` to dataframe user
 df_ratings['user'] = df_ratings['User_ID'].map(user_to_user_encoded)
 
 # Mapping `Food_ID` to dataframe food
 df_ratings['food'] = df_ratings['Food_ID'].map(food_to_food_encoded)
+
+"""The code cell above is used to do mapping the `User_ID` and `Food_ID` to dataframe user and food respectively."""
 
 # Check for number of users
 num_users = len(user_to_user_encoded)
@@ -268,9 +293,12 @@ print('Number of User: {}, Number of Food: {}, Min Rating: {}, Max Rating: {}'.f
     )
 )
 
-# Shuffle the dataset
+"""The code cell above is used to check the number of users, number of foods, and the minimum also the maximum value of rating available on the dataset."""
+
 df_ratings = df_ratings.sample(frac=1, random_state=42)
 df_ratings
+
+"""The code cell above is used to shuffle the dataset."""
 
 # Creating `x` variable to match user and food data into one value
 x = df_ratings[['user', 'food']].values
@@ -288,6 +316,8 @@ x_train, x_val, y_train, y_val = (
 )
 
 print(x, y)
+
+"""The code cell above is used to create the `x` and `y` variables, followed by data splitting."""
 
 class RecommenderNet(tf.keras.Model):
   def __init__(self, num_users, num_food, embedding_size, **kwargs):
@@ -322,6 +352,8 @@ class RecommenderNet(tf.keras.Model):
 
     return tf.nn.sigmoid(x) # activation sigmoid
 
+"""The code cell above is used to create class RecommenderNet with keras Model class."""
+
 model = RecommenderNet(num_users, num_food, 50)
 
 model.compile(
@@ -329,6 +361,8 @@ model.compile(
     optimizer = keras.optimizers.Adam(learning_rate=0.0001),
     metrics=[tf.keras.metrics.RootMeanSquaredError()]
 )
+
+"""The code cell above is used to compile the model. This model uses Binary Crossentropy to calculate the loss function, Adam (Adaptive Moment Estimation) as the optimizer, and Root Mean Squared Error (RMSE) as the evaluation metric."""
 
 # Training process
 
@@ -348,6 +382,8 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='best')
 plt.show()
 
+"""From the metric visualization on the output of the code cell above, it can be seen that there is decrease trend of the RMSE in each epoch both in training and evaluation data. This indicates that the model can learn properly from the data. From this visualization, it can also be seen that a final error value of 0.3110 was obtained with an error in the validation data of 0.3261."""
+
 food_df = food_new
 df = pd.read_csv('ratings.csv')
 
@@ -366,6 +402,8 @@ user_encoder = user_to_user_encoded.get(user_id)
 user_food_array = np.hstack(
     ([[user_encoder]] * len(food_not_tasted), food_not_tasted)
 )
+
+"""The code cell above is used to create a new variable called `food_not_tasted` as the food list that can be used for recommendation to the user."""
 
 ratings = model.predict(user_food_array).flatten()
 
@@ -398,3 +436,4 @@ recommended_food = food_df[food_df['id'].isin(recommended_food_ids)]
 for row in recommended_food.itertuples():
   print(row.food_name, ':', row.category)
 
+"""The code cell above performs the food recommendation for a user with `User_ID` 73. From the output, it can be seen that there are 10 food recommended to this user."""
