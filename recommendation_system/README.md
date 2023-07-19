@@ -6,14 +6,14 @@
 
 Makanan merupakan hal yang menjadi kebutuhan sehari-hari setiap orang. Pemilihan makanan merupakan tahap yang pasti dilalui setiap orang dalam upaya mereka untuk memenuhi kebutuhan sehari-hari mereka ini.
 
-Ragam pilihan makanan yang ada pun terus meningkat dari waktu ke waktu seiring dengan pertumbuhan jumlah usaha restoran, rumah makan, dan kafe. Menurut data dari salah satu provinsi di Indonesia, yakni Jawa Barat, pada tahun 2021, jumlah usaha sektor yang disebutkan tersebut mengalami peningkatan sekitar 19% dari tahun sebelumnya [1]. Pertumbuhan serupa juga terjadi di sejumlah daerah lain, termasuk daerah-daerah di luar wilayah Indonesia. Hal ini tentu membuat opsi makanan yang dapat dikonsumsi seseorang menjadi semakin meningkat. Namun, peningkatan ini tidak berbanding lurus dengan kemudahan seseorang dalam menentukan makanan apa yang ingin disantap. Banyaknya pilihan makanan tak jarang malah membuat seseorang kebingungan dalam menentukan pilihan makanannya.
+Ragam pilihan makanan yang ada pun terus meningkat dari waktu ke waktu seiring dengan pertumbuhan jumlah usaha restoran, rumah makan, dan kafe. Menurut data dari salah satu provinsi di Indonesia, yakni Jawa Barat, pada tahun 2021, jumlah usaha sektor yang disebutkan tersebut mengalami peningkatan sekitar 19% dari tahun sebelumnya [1]. Pertumbuhan serupa juga terjadi di sejumlah daerah lain, termasuk daerah-daerah di luar wilayah Indonesia. Hal ini tentu membuat opsi makanan yang dapat dikonsumsi seseorang menjadi semakin meningkat. Selain itu, hal ini juga menunjukkan pertumbuhan pesat yang ada pada industri kuliner. Namun, peningkatan ini tidak berbanding lurus dengan kemudahan seseorang dalam menentukan makanan apa yang ingin disantap. Banyaknya pilihan makanan tak jarang malah membuat seseorang kebingungan dalam menentukan pilihan makanannya. Hal ini pun apabila tidak segera dicari solusinya akan dapat memengaruhi profitabilitas pihak-pihak yang bergerak di industri kuliner. 
 
 **Oleh sebab itu, diperlukan suatu sistem yang dapat dengan tepat memberikan rekomendasi pilihan makanan sehingga memudahkan seseorang dalam menentukan pilihan makanannya.**
 
 Pada pengerjaan kasus ini, digunakan beberapa metode dalam sistem rekomendasi, yakni *content-based filtering* dan *collaborative filtering*. Penelitian terkait memberikan wawasan tambahan terkait bagaimana penerapan *content-based filtering* dan *collaborative filtering* dalam menyelesaikan permasalahan semacam ini [2],[3].
 
 ## *Business Understanding*
-Berdasarkan latar belakang yang dipaparkan pada bagian sebelumnya, adanya sistem rekomendasi makanan dapat mempermudah seseorang dalam menentukan makanan apa yang ingin dikonsumsi sesuai preferensinya. Adanya sistem ini juga memberikan dampak positif bagi sektor kuliner, terutama dalam hal pendapatan, dikarenakan kemudahan dalam pemilihan makanan yang dirasakan seseorang membuatnya tertarik untuk membeli makanan lain yang masih sesuai dengan preferensinya.
+Berdasarkan latar belakang yang dipaparkan pada bagian sebelumnya, adanya sistem rekomendasi makanan dapat menghadirkan kemudahan bagi orang-orang dalam menentukan makanan apa yang ingin dikonsumsi sesuai preferensinya. Adanya sistem ini juga memberikan dampak positif bagi sektor kuliner, terutama dalam hal pendapatan, dikarenakan kemudahan dalam pemilihan makanan yang dirasakan orang-orang membuat mereka tertarik untuk membeli makanan lain yang sesuai dengan preferensinya.
 
 ### *Problem Statement*
 
@@ -46,11 +46,11 @@ Tabel 1. Sampel Data Makanan
 | 3 | sweet chilli almonds | Snack | veg | almonds whole, egg white, curry leaves, salt, sugar (fine grain), red chilli powder |
 
 ### Deskripsi Fitur pada Data Makanan
-- `Food_ID`: ID makanan
-- `Name`: Nama makanan
-- `C_Type`: Jenis Makanan
+- `Food_ID`: ID makanan yang menunjukkan kode unik setiap nama makanan yang terdapat pada *dataset*
+- `Name`: Nama makanan yang terdapat pada *dataset* 
+- `C_Type`: Jenis Makanan yang terdapat pada *dataset*
 - `Veg_Non`: Menunjukkan apakah suatu makanan termasuk sayuran atau bukan
-- `Describe`: Deskripsi makanan
+- `Describe`: Deskripsi setiap makanan yang terdapat pada *dataset*
 
 
 Tabel 2 menunjukkan sampel dari *dataset* terkait *rating* dari *user* yang digunakan pula pada pengerjaan proyek ini.
@@ -64,16 +64,19 @@ Tabel 2. Sampel Data *Rating User*
 | 1 | 24 | 5 |
 
 ### Deskripsi Fitur pada Data *Rating User*
-- `User_ID`: ID *user*
-- `Food_ID`: ID makanan
-- `Rating`: *Rating* yang diberikan *user* terhadap suatu makanan
+- `User_ID`: ID *user* yang menunjukkan kode unik setiap *user* yang terdapat pada *dataset*
+- `Food_ID`: ID makanan yang menunjukkan kode unik setiap nama makanan yang terdapat pada *dataset*
+- `Rating`: *Rating* yang diberikan setiap *user* terhadap suatu makanan yang terdapat pada *dataset*
 
 ### **Langkah-Langkah dalam *Data Understanding***
 1. Melakukan impor dataset ke dalam Google Colaboratory.
-2. Melihat deskripsi dasar *dataset* seperti jumlah jenis makanan dan distribusi *rating*.
+2. Melihat deskripsi dasar *dataset* seperti jumlah baris dan kolom yang terdapat pada *dataset* yang tersedia, juga melihat nilai unik pada kolom tertentu.
+3. Membuat visualisasi yang dapat menunjukkan distribusi jenis makanan agar dapat diketahui dominasi setiap jenis makanan pada *dataset*.
+4. Membuat visualisasi yang dapat menunjukkan distribusi *rating* yang diberikan *user* agar dapat diketahui kecenderungan *rating* yang diberikan *user* yang terdapat pada *dataset*.
 
 ### **Hasil *Data Understanding***
 
+Dari penerapan tahap *Data Understanding* didapatkan beberapa fakta berikut.
 ```
 Jumlah baris data makanan: 400
 Jumlah jenis makanan: 15
@@ -81,6 +84,8 @@ Jenis makanan: ['Healthy Food', 'Snack', 'Dessert', 'Japanese', 'Indian', 'Frenc
 Jumlah user unik pada data rating : 101
 Jumlah makanan unik pada data makanan: 310
 ```
+
+Selain itu, terdapat pula informasi lain terkait distribusi jenis makanan dan distribusi *rating* yang diberikan *user* yang dapat diamati pada Gambar 1 dan Gambar 2.
 
 ![Distribusi Jenis Makanan](https://github.com/sam-marhaendra/mlt-submission/assets/47298320/66cd52ff-0553-4235-9d96-f422c43b16a1)
 #### Gambar 1. Distribusi Jenis Makanan
@@ -99,11 +104,11 @@ Berdasarkan Gambar 2, dapat diketahui bahwa distribusi data *rating* cenderung d
 
 ## ***Data Preparation***
 ### ***Content-based Filtering***
-1. Menghapus baris data yang termasuk *missing value* pada data makanan.
-2. Mengurutkan data berdasarkan kolom `Food_ID`, lalu menghapus data duplikat pada kolom tersebut.
+1. Menghapus baris data yang termasuk *missing value* pada data makanan menggunakan **dropna()**.
+2. Mengurutkan data berdasarkan kolom `Food_ID`, lalu menghapus data duplikat pada kolom tersebut menggunakan **drop_duplicates()**.
 3. Menghapus kolom `User_ID` dan `Rating`. Jumlah baris data pada akhir tahap ini yakni 309 baris.
 ### ***Collaborative Filtering***
-1. Menghapus baris data yang termasuk *missing value* pada data *rating*.
+1. Menghapus baris data yang termasuk *missing value* pada data *rating* menggunakan **dropna()**.
 2. Melakukan *encode* pada kolom `User_ID` dan `Food_ID`.
 3. Melakukan pengacakan data, lalu dilanjutkan dengan membagi data ke dalam data latih dan data tes dengan proporsi 80% dan 20%, dengan kolom targetnya yakni kolom terkait *rating*.
 
@@ -228,7 +233,7 @@ Apabila merujuk pada Tabel 5 dan Tabel 6, dapat diketahui bahwa jumlah item reko
 $$Precision = \frac{5}{5 + 0}$$
 $$Precision = 1$$
 
-Dari hasil perhitungan di atas, apabila dikalikan dengan 100%, maka akan menghasilkan nilai *Precision* sebesar 100%. Maka, dapat disimpulkan bahwa sistem rekomendasi menggunakan *content-based filtering* yang dibuat mampu menghasilkan hasil rekomendasi yang sepenuhnya relevan dengan preferensi *user*.
+Dari hasil perhitungan di atas, apabila dikalikan dengan 100%, maka akan menghasilkan nilai *Precision* sebesar 100%. Maka, dapat disimpulkan bahwa sistem rekomendasi menggunakan *content-based filtering* yang dibuat mampu menghasilkan hasil rekomendasi yang sangat relevan dengan preferensi *user*.
 
 
 ### *Collaborative Filtering*
@@ -248,6 +253,7 @@ Berdasarkan Gambar 3, dapat diketahui bahwa terjadi tren penurunan RMSE di setia
 - Sistem rekomendasi yang dikembangkan pada proyek ini mampu memberikan performa yang baik.
 - Hasil evaluasi sistem rekomendasi dengan *content-based filtering* mampu menghasilkan *Precision* 100% pada sampel pengujian yang dipakai.
 - Hasil evaluasi sistem rekomendasi dengan *collaborative filtering* menghasilkan RMSE pada data latih sebesar 0.3110 dan pada data validasi sebesar 0.3261.
+- Ke depannya dapat dilakukan pembuatan sistem rekomendasi yang menggunakan pendekatan *hybrid* sehingga dapat menggabungkan kelebihan dari *content-based filtering* dan *collaborative filtering* dan menghasilkan hasil rekomendasi yang lebih baik.
 
 ## Daftar Pustaka
 [1] Jabar Digital Service, "Jumlah Usaha Restoran, Rumah Makan, dan Cafe Berdasarkan Kabupaten/Kota di Jawa Barat," Jabarprov.go.id, 2021. https://opendata.jabarprov.go.id/id/dataset/jumlah-usaha-restoran-rumah-makan-dan-cafe-berdasarkan-kabupatenkota-di-jawa-barat.
